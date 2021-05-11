@@ -12,7 +12,7 @@ const N_CHOICE = 4
 const N_DUPLICATE_CHOICE = 0
 const N_MAX_TRY = 1024
 
-const N_SOLVE = 1
+const N_SOLVE = 256
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
@@ -87,22 +87,27 @@ func solve(answer [N_CHOICE]int) (int, bool) {
 
 func judge(input [N_CHOICE]int, answer [N_CHOICE]int) [2]int {
 	r := [2]int{0, 0}
+	i := input
 	w := answer
 
 	// hit
-	for i := 0; i < N_CHOICE; i++ {
-		if input[i] == w[i] {
+	for j := 0; j < N_CHOICE; j++ {
+		if i[j] == w[j] {
 			r[0]++
-			w[i] = -1
+			i[j] = -1
+			w[j] = -1
 		}
 	}
 
 	// blow
-	for i := 0; i < N_CHOICE; i++ {
-		for j := 0; j < N_CHOICE; j++ {
-			if input[i] == w[j] {
+	for j := 0; j < N_CHOICE; j++ {
+		if i[j] < 0 {
+			continue
+		}
+		for k := 0; k < N_CHOICE; k++ {
+			if i[j] == w[k] {
 				r[1]++
-				w[j] = -1
+				w[k] = -1
 				break
 			}
 		}
